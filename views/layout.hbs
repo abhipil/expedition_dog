@@ -52,7 +52,7 @@
        // change
         var sql = new cartodb.SQL({ user: 'abhipil' , format: 'geojson'}, { api_key: '4e2e983941229d9e4700bff34ed1ffafbe00d6a0' });
 
-        sql.execute("SELECT * FROM incidents").done(function(data) {
+        sql.execute("SELECT the_geom FROM atlantic_wells").done(function(data) {
 
           data = data.features.map(function(r) {
               return new google.maps.LatLng(r.geometry.coordinates[1], r.geometry.coordinates[0]) 
@@ -69,6 +69,44 @@
 
           heatmap.setMap(map);
         });
+
+
+        sql.execute("SELECT the_geom FROM well").done(function(data) {
+
+          data = data.features.map(function(r) {
+              return new google.maps.LatLng(r.geometry.coordinates[1], r.geometry.coordinates[0]) 
+            });
+
+          var pointArray = new google.maps.MVCArray(data);
+
+          heatmap = new google.maps.visualization.HeatmapLayer({
+            data: pointArray
+          });
+
+          heatmap.set('radius', heatmap.get('radius') ? null : 20);
+          heatmap.set('opacity', heatmap.get('opacity') ? null : .8);
+
+          heatmap.setMap(map);
+        });
+        sql.execute("SELECT the_geom FROM pacific_wells_04_07_15").done(function(data) {
+
+          data = data.features.map(function(r) {
+              return new google.maps.LatLng(r.geometry.coordinates[1], r.geometry.coordinates[0]) 
+            });
+
+          var pointArray = new google.maps.MVCArray(data);
+
+          heatmap = new google.maps.visualization.HeatmapLayer({
+            data: pointArray
+          });
+
+          heatmap.set('radius', heatmap.get('radius') ? null : 20);
+          heatmap.set('opacity', heatmap.get('opacity') ? null : .8);
+
+          heatmap.setMap(map);
+        });
+        
+         // UNION  UNION SELECT the_geom FROM pacific_wells_04_07_15
       }
       window.onload = main;
     </script>
